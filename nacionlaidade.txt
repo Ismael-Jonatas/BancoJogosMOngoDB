@@ -1,0 +1,29 @@
+db.nacionalidade.insertMany([{
+    descrição: "Brasil",
+},
+
+{
+    descrição: "EUA",
+},
+
+{
+    descrição: "Russia",
+},
+
+{
+    descrição: "Equador",
+},
+
+{
+    descrição: "Itália",
+},
+
+{
+    descrição: "Espanha",
+}])
+
+
+/*Remoção do pais itália da coleção de Equador*/
+db.nacionalidade.remove({"descrição": "Equador"})
+
+

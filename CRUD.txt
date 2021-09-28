@@ -1,0 +1,85 @@
+/*CRUD*/
+
+/*▪ 01 para coleção inteira*/
+/*Mostre por compelto a coleção jogo*/
+db.jogo.find()
+
+/*▪ 01 com contagem de documentos na coleção*/
+/*Conte quantos documentos existem na coleção de jogo*/
+db.jogo.count()
+
+/*▪ 02 consultas com filtros diversos (IN, GT, etc), sem projeção*/
+
+/*Mostre o jogo a qual tem que possui a DLC Oblivion*/
+/*Por vezes o usuario não lembra do jogo e sim, uma DLC que seja icônica no mercado*/
+db.jogo.find( { DLC: { $in: ["Oblivion"] } } )
+
+/*Mostre os usurios pertecentes a Região da Espanha*/
+/*Pesquisar o usuario pela nacionalidade ajuda os usuários a adicionar outros usuários que sejam da sua mesma região.*/
+db.usuario.find( { nacionalidade: { $eq:"Espanha"} } )
+
+/*▪ 02 consultas com filtros diversos e com projeção*/
+/*Consulte um usuario por meio do seu NickName*/
+/*Geralemnte os usuários procuram outros usuários por meio do seu nickname.*/
+db.usuario.find( { nick_name: { $eq:"Luiztaf"} },{_id:0, nick_name: 1} )
+
+/*Mostre os jogos a qual o seu valor de venda esteja dentro de uma faixa de preço especificada*/
+/*Pesquisa por intervalos de preços trazem, ainda mais opções para o usuário e define qual jogo está
+na faixa de preço que cabe no seu bolso. geralmente procuram jogos com valores que tenham no momento para gastar*/
+db.jogo.find({preço: {$gte:40.00 ,$lte: 70.00 }},{_id:0,descrição:1,preço:1})
+
+/*▪ 01 consulta com filtro, projeção e uso de expressão regular*/
+/*Encontrar todos os usuários que tenham o email do tipo outlook e que pertença ao Brasil.*/ 
+/*Este tipo de consulta pode servir para que a aplicação envie emails automáticos mais personalizados.*/
+db.usuario.find({login: {$regex: 'outlook'},nacionalidade:{$eq:"Brasil"}},{_id:0, nick_name:1, login:1,nacionalidade:1})
+
+/*▪ 02 consultas com acesso a array de elementos*/
+/*Consultas abaixo que podem servir para um catalago de venda de DLC(s) pertecente(s) a um jogo*/
+/*Consulte o jogo a qual a DLC especificada pertence*/
+/*retorna o jogo que tem sua expansão(DLC) com nome Infernais*/
+db.jogo.find({"DLC.1": "Infernais"})
+
+/*Consulte  o jogo a quais as DLC são pertecentes a ele*/
+db.jogo.find({DLC:{ $all: ["Oblivion", "Danguard"]}})
+
+/*▪ 02 consultas com acesso a estrutura embutida*/
+/*Consultas que pode servir para ajudar na busca e formação de grupos(forums) com base na região é endereço*/
+/*Consulte os usuarios de uma região especifica*/
+db.usuario.find({"nacionalidade": "Brasil"})
+
+/*Consulte os usuarios de um bairro especifico*/
+db.usuario.find({"endereço.bairro": "Cristo"})
+
+/*▪ 02 consultas diferentes com aggregate*/
+/*Consulte a quantidade de usuaruios atrelados a coleção nacionalidade*/
+/*Mostra O nome do pais e quantos usuarios são daquela região*/
+db.usuario.aggregate([{$group:{_id: "$nacionalidade", Quantidade:{$sum:1}}}])
+
+/*Consulte o preço dos jogos que iniciem com Letra T*/
+/*Mostra o nome do jogo e o preço dele com base na letra inicial especificada*/
+/*É comum esquecer o nome todo jogo, 
+por a primeira inicial do nome do jogo ja ia trazer os jogos com a letra inserida e o preço do mesmo*/
+db.jogo.aggregate([
+                    {"$match": {"descrição": /^T/}},
+                    {$group:{_id: "$descrição", Preço:{$sum:"$preço"}}},
+                    {$sort:{Preço: 1}}])
+    
+/*▪ 01 consulta com lookup*/
+/*Consulte a relação dos usuarios com os jogos, quais os jogos que os usuarios jogam*/
+db.usuario.aggregate([
+   {
+     $lookup:
+       {
+         from: "jogo",
+         localField: "jogo",
+         foreignField: "_id",
+         as: "Jogos_do_usuário"
+       }
+  }
+])
+
+
+/*▪ 01 outra consulta a seu critério, dentro do contexto da aplicação*/  
+/*Consulte os usuários que tenham a data de nascimento dentro de um intervalo especificado.*/ 
+/*Essa consulta de busca de idade pode ser usada para oferecer um catalago de jogos baseado na idade do usuario, antigos ou novos etc*/      
+db.usuario.find({data_nasc: { $gte: new Date("1995-01-01"), $lte: new Date("1997-12-30")}})

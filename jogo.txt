@@ -1,0 +1,89 @@
+db.jogo.insertMany([{
+    desenvolvedora:"CDprojekt",
+    descrição: "The Witcher",
+    data_laçamento: new Date(2008,08,18),
+    DLC: ["Vanilla","Infernais"],
+    preço: 75.80,
+    
+},
+
+{
+    desenvolvedora:"Actvision",
+    descrição: "Call of Duty",
+    data_laçamento: new Date(2015,04,01),
+    DLC: ["Vanilla"],
+    preço: 65.30,
+    
+},
+
+{
+    desenvolvedora:"Bethesda",
+    descrição: "Skyrim",
+    data_laçamento: new Date(2006,05,03),
+    DLC: ["Vanilla","Oblivion","Dragonboard","Danguard"],
+    preço: 180.00,
+    
+},
+
+{
+    desenvolvedora:"Rockstar",
+    descrição: "GTA V",
+    data_laçamento: new Date(2015,06,08),
+    DLC: ["Vanilla"],
+    preço: 160.00,
+    
+},
+
+{
+    desenvolvedora:"Ubisoft",
+    descrição: "Assasin's Creed IV Black Flag",
+    data_laçamento: new Date(2015,03,29),
+    DLC: ["Vanilla"],
+    preço:70.00,
+    
+}])
+
+
+/*CREATE INDICE*/
+
+/*Porque a tabela tem inúmeros valores distindos e os campos são consultados na forma
+do intervalo de data. A coluna também é frequentemente usada em cláusulasa where, joins e group by*/
+
+/*Baseado em pesquisas de compra de jogos geralmente os usurários pesquisam os jogos por data de lançamento
+procurando os jogos mais recentes lançados*/
+db.jogo.createIndex({data_laçamento: -1}),
+/*Visualização do índice criado*/
+db.jogo.getIndexes()
+
+
+/*Relacionamento de jogo com a coleção usuario*/
+db.jogo.updateOne({_id : ObjectId("60b6cdda93fd9d7e119516f2")},
+    {$set: {usuario: {_id: ObjectId("60b6cfe093fd9d7e119516f7"), 
+        nick_name: "AliceBBB", 
+        nacionalidade: "Brasil"}}})
+
+
+db.jogo.updateMany({_id : ObjectId("60b6cdda93fd9d7e119516f3")},
+    {$set: {usuario: {_id: ObjectId("60b6cfe093fd9d7e119516f8"), 
+        nick_name: "Luiztaf", 
+        nacionalidade: "Espanha"}}})
+
+
+db.jogo.updateOne({_id : ObjectId("60b6cdda93fd9d7e119516f4")},
+    {$set: {usuario: [{_id: ObjectId("60b6cfe093fd9d7e119516f9"), 
+        nick_name: "Helenadark", 
+        nacionalidade: "EUA"},
+        {_id: ObjectId("60b6cfe093fd9d7e119516fb"), 
+        nick_name: "Lucastrab", 
+        nacionalidade: "Brasil"}]}})
+
+
+db.jogo.updateMany({_id : ObjectId("60b6cdda93fd9d7e119516f6")},
+    {$set: {usuario: {_id: ObjectId("60b6cfe093fd9d7e119516fb"), 
+        nick_name: "Lucastrab", 
+        nacionalidade: "Brasil"}}})
+
+
+
+db.jogo.updateOne({_id : ObjectId("60b6cdda93fd9d7e119516f4")}, {$set: {descrição: "The Elder Scrolls V: Skyrim"}})
+db.jogo.updateOne({_id: ObjectId("60b6cdda93fd9d7e119516f3")}, {$set: {DLC: ["Vanilla","Batalha Final"]}})

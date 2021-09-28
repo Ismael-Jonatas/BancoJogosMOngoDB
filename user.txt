@@ -1,0 +1,76 @@
+/*Inserção de dados na coleção usuario*/
+db.usuario.insertMany([
+    {login:"Alice@outlook.com", 
+    senha: "Alice1010", 
+    nick_name: "AliceBBB", 
+    data_nasc: new Date(1996,05,23), 
+    telefone: "11111111", 
+    endereço: {bairro: "José Americo", 
+        rua: "Edivaldo Castro Orador", 
+        numero: 123,},
+    nacionalidade: "Brasil",
+},
+    {login:"Luiz@outlook.com", 
+    senha: "Luiz2020", 
+    nick_name: "Luiztaf", 
+    data_nasc: new Date(1999,02,04), 
+    telefone: "22222222", 
+    endereço: {bairro: "Cristo", 
+        rua: "Pedro Alarmantes", 
+        numero: 305,},
+     nacionalidade: "Espanha",
+},
+    {login:"Helena@hotmail.com", 
+    senha: "Helena3030", 
+    nick_name: "Helenadark", 
+    data_nasc: new Date(2000,07,06),  
+    telefone: "", 
+    endereço: {bairro: "Intermares", 
+        rua: "São Barbosa Vigor", 
+        numero: 36,},
+    nacionalidade: "EUA",
+},
+    {login:"Manuela@outlook.com", 
+    senha: "Manuela4040", 
+    nick_name: "Manuelatheo", 
+    data_nasc: new Date(1997,03,17), 
+    telefone: "33333333", 
+    endereço: {bairro: "Cristo", 
+        rua: "Mireles Leitão", 
+        numero: 65,},
+    nacionalidade: "Brasil",
+},
+    {login:"Lucas@hotmail.com", 
+    senha: "Lucas5050", 
+    nick_name: "Lucastrab", 
+    data_nasc: new Date(2000,11,11),  
+    telefone: "", 
+    endereço: {bairro: "Cristo", 
+        rua: "Santo Antonio de Padua", 
+        numero: 201,},
+    nacionalidade: "Brasil",
+}])
+
+    
+/*Relacionamentos de usuario com a coleção jogo*/
+
+db.usuario.updateOne({_id: ObjectId("60b6cfe093fd9d7e119516f7")},
+    {$set: {jogo: ObjectId("60b6cdda93fd9d7e119516f2")}})    
+
+db.usuario.updateOne({_id : ObjectId("60b6cfe093fd9d7e119516f8")},
+    {$set: {jogo: ObjectId("60b6cdda93fd9d7e119516f3")}})
+ 
+db.usuario.updateOne({_id : ObjectId("60b6cfe093fd9d7e119516f9")},
+    {$set: {jogo: ObjectId("60b6cdda93fd9d7e119516f4")}})
+    
+db.usuario.updateMany(
+{_id : ObjectId("60b6cfe093fd9d7e119516fb")},
+{$set: {jogo: [{_id: ObjectId("60b6cdda93fd9d7e119516f4")}, 
+               {_id: ObjectId("60b6cdda93fd9d7e119516f6")}]}})
+               
+
+
+
+               
+               
+             
